@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Home, 
   Users, 
@@ -39,18 +38,10 @@ interface UserStats {
   created_at: string;
 }
 
-interface DailyActivity {
-  date: string;
-  users_count: number;
-  total_time: number;
-  sessions_count: number;
-}
-
 export default function AdminDashboard() {
   const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const [users, setUsers] = useState<UserStats[]>([]);
-  const [dailyActivity, setDailyActivity] = useState<DailyActivity[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [sortBy, setSortBy] = useState<'sessions' | 'time'>('sessions');
 
@@ -63,7 +54,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (user && isAdmin) {
       fetchUsers();
-      fetchDailyActivity();
     }
   }, [user, isAdmin]);
 
@@ -83,21 +73,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const fetchDailyActivity = async () => {
-    try {
-      // Get last 7 days of activity
-      const { data, error } = await supabase
-        .from('daily_stats')
-        .select('*')
-        .order('date', { ascending: false })
-        .limit(7);
-
-      if (error) throw error;
-      setDailyActivity(data || []);
-    } catch (error) {
-      console.error('Error fetching daily activity:', error);
-    }
-  };
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -240,13 +215,7 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto">
-        <Tabs defaultValue="users" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-md">
-            <TabsTrigger value="users">Utilizatori</TabsTrigger>
-            <TabsTrigger value="activity">Activitate Zilnică</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="users" className="mt-4">
+        <div className="mt-4">
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -331,48 +300,7 @@ export default function AdminDashboard() {
                 </Table>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="activity" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Activitate Ultimele 7 Zile</CardTitle>
-                <CardDescription>
-                  Statistici zilnice despre utilizatori și timpul petrecut
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead className="text-center">Utilizatori Activi</TableHead>
-                      <TableHead className="text-center">Sesiuni</TableHead>
-                      <TableHead className="text-center">Timp Total</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {dailyActivity.map((day) => (
-                      <TableRow key={day.date}>
-                        <TableCell className="font-medium">
-                          {new Date(day.date).toLocaleDateString('ro-RO', {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })}
-                        </TableCell>
-                        <TableCell className="text-center">{day.users_count}</TableCell>
-                        <TableCell className="text-center">{day.sessions_count}</TableCell>
-                        <TableCell className="text-center">{formatTime(day.total_time)}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
       </div>
     </div>
   );
