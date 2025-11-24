@@ -32,7 +32,8 @@ interface UserStats {
   full_name: string;
   avatar_url: string | null;
   is_admin: boolean;
-  total_sessions: number;
+  total_logins: number; // număr de logări
+  total_game_accesses: number; // număr de accesări jocuri - CE VREA PROFESORUL
   total_time_spent: number;
   last_login: string;
   created_at: string;
@@ -43,7 +44,7 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [users, setUsers] = useState<UserStats[]>([]);
   const [loadingData, setLoadingData] = useState(true);
-  const [sortBy, setSortBy] = useState<'sessions' | 'time'>('sessions');
+  const [sortBy, setSortBy] = useState<'accesses' | 'time'>('accesses');
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
@@ -62,7 +63,7 @@ export default function AdminDashboard() {
       const { data, error } = await supabase
         .from('users')
         .select('*')
-        .order(sortBy === 'sessions' ? 'total_sessions' : 'total_time_spent', { ascending: false });
+        .order(sortBy === 'accesses' ? 'total_game_accesses' : 'total_time_spent', { ascending: false });
 
       if (error) throw error;
       setUsers(data || []);
@@ -120,7 +121,8 @@ export default function AdminDashboard() {
   }
 
   const totalUsers = users.length;
-  const totalSessions = users.reduce((sum, u) => sum + (u.total_sessions || 0), 0);
+  const totalLogins = users.reduce((sum, u) => sum + (u.total_logins || 0), 0);
+  const totalGameAccesses = users.reduce((sum, u) => sum + (u.total_game_accesses || 0), 0);
   const totalTime = users.reduce((sum, u) => sum + (u.total_time_spent || 0), 0);
   const avgTimePerUser = totalUsers > 0 ? totalTime / totalUsers : 0;
 
@@ -174,13 +176,13 @@ export default function AdminDashboard() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sesiuni Totale</CardTitle>
+              <CardTitle className="text-sm font-medium">Accesări Jocuri</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{totalSessions}</div>
+              <div className="text-2xl font-bold">{totalGameAccesses}</div>
               <p className="text-xs text-muted-foreground">
-                Accesări platformă
+                Total clickuri pe jocuri
               </p>
             </CardContent>
           </Card>
@@ -222,19 +224,19 @@ export default function AdminDashboard() {
                   <div>
                     <CardTitle>Utilizatori Platformă</CardTitle>
                     <CardDescription>
-                      Sortați după {sortBy === 'sessions' ? 'număr de accesări' : 'timp petrecut'}
+                      Sortați după {sortBy === 'accesses' ? 'număr de accesări jocuri' : 'timp petrecut'}
                     </CardDescription>
                   </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      setSortBy(sortBy === 'sessions' ? 'time' : 'sessions');
+                      setSortBy(sortBy === 'accesses' ? 'time' : 'accesses');
                       fetchUsers();
                     }}
                   >
                     <ArrowUpDown className="mr-2 h-4 w-4" />
-                    {sortBy === 'sessions' ? 'Sortează după timp' : 'Sortează după accesări'}
+                    {sortBy === 'accesses' ? 'Sortează după timp' : 'Sortează după accesări'}
                   </Button>
                 </div>
               </CardHeader>
@@ -244,7 +246,7 @@ export default function AdminDashboard() {
                     <TableRow>
                       <TableHead>Utilizator</TableHead>
                       <TableHead>Email</TableHead>
-                      <TableHead className="text-center">Accesări</TableHead>
+                      <TableHead className="text-center">Accesări Jocuri</TableHead>
                       <TableHead className="text-center">Timp Petrecut</TableHead>
                       <TableHead className="text-center">Ultima Vizită</TableHead>
                       <TableHead className="text-center">Status</TableHead>
@@ -265,7 +267,7 @@ export default function AdminDashboard() {
                         </TableCell>
                         <TableCell className="text-muted-foreground">{u.email}</TableCell>
                         <TableCell className="text-center font-semibold">
-                          {u.total_sessions || 0}
+                          {u.total_game_accesses || 0}
                         </TableCell>
                         <TableCell className="text-center">
                           {formatTime(u.total_time_spent || 0)}

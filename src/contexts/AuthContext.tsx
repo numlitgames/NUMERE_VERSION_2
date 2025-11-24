@@ -102,13 +102,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .insert({
           user_id: user.id,
           session_start: new Date().toISOString(),
-          page_visits: {},
+          time_spent: 0,
         })
         .select()
         .single();
 
       if (data && !error) {
         currentActivityLogId = data.id;
+        console.log('✅ Activity log created:', data.id);
+      } else {
+        console.error('❌ Error creating activity log:', error);
       }
     };
 
@@ -120,13 +123,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const timeSpent = Math.floor((Date.now() - sessionStart) / 1000);
       
-      await supabase
+      console.log(`⏱️ Updating time spent: ${timeSpent}s`);
+      
+      const { error } = await supabase
         .from('activity_logs')
         .update({
           time_spent: timeSpent,
           session_end: new Date().toISOString(),
         })
         .eq('id', currentActivityLogId);
+      
+      if (error) {
+        console.error('❌ Error updating activity log:', error);
+      } else {
+        console.log(`✅ Time updated: ${timeSpent}s`);
+      }
     }, 30000); // Update every 30 seconds
 
     // Track page visits
@@ -146,13 +157,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Final update on cleanup
       if (currentActivityLogId) {
         const timeSpent = Math.floor((Date.now() - sessionStart) / 1000);
+        console.log(`🏁 Final time update on cleanup: ${timeSpent}s`);
+        
         supabase
           .from('activity_logs')
           .update({
             time_spent: timeSpent,
             session_end: new Date().toISOString(),
           })
-          .eq('id', currentActivityLogId);
+          .eq('id', currentActivityLogId)
+          .then(({ error }) => {
+            if (error) {
+              console.error('❌ Error in final update:', error);
+            } else {
+              console.log('✅ Final time saved:', timeSpent, 's');
+            }
+          });
       }
     };
   }, [user]);
@@ -212,8 +232,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return; // Don't proceed if upsert fails
       }
 
-      // Increment session count
-      const { error: rpcError } = await supabase.rpc('increment_user_sessions', { user_id: user.id });
+      // Increment login count
+      const { error: rpcError } = await supabase.rpc('increment_user_logins', { user_id: user.id });
       
       if (rpcError) {
         console.error('RPC error:', rpcError);

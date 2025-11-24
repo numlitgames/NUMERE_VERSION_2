@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { GameTracker } from "./components/GameTracker";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -39,6 +40,7 @@ const App = () => (
       <Sonner position="top-left" />
       <BrowserRouter>
         <AuthProvider>
+          <GameTracker />
           <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
