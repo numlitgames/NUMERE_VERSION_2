@@ -271,20 +271,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
+      // Încearcă să te deloghezi prin Supabase
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      
+      // Ignorăm eroarea "Auth session missing" - e ok, user-ul e deja delogat
+      if (error && !error.message.includes('session')) {
+        throw error;
+      }
+      
+      // Clear local state
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
       
       toast({
         title: 'Deconectare reușită',
         description: 'Te-ai deconectat cu succes!',
       });
+      
+      // Redirect la login
+      window.location.href = '/login';
     } catch (error: any) {
       console.error('Error signing out:', error);
+      
+      // Chiar dacă e eroare, forțăm delogarea locală
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+      
       toast({
-        title: 'Eroare',
-        description: error.message,
-        variant: 'destructive',
+        title: 'Deconectare',
+        description: 'Te-ai deconectat local.',
+        variant: 'default',
       });
+      
+      // Redirect la login oricum
+      window.location.href = '/login';
     }
   };
 

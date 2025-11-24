@@ -2068,8 +2068,10 @@ export default function Index() {
               variant="outline"
               size="sm"
               onClick={signOut}
+              className="gap-1"
             >
               <LogOut className="h-4 w-4" />
+              Deconectare
             </Button>
           </div>
         )}
