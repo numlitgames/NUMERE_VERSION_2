@@ -37,9 +37,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(session?.user ?? null);
         setLoading(false); // SETĂM LOADING FALSE IMEDIAT!
         
-        // Verificăm admin DUPĂ ce am setat loading
+        // Verificăm admin și trackăm DUPĂ ce am setat loading
         if (session?.user) {
-          console.log('User found, checking admin in background...');
+          console.log('User found, tracking and checking admin in background...');
+          
+          // Track user login (nu blochează UI-ul)
+          trackUserLogin(session.user).catch(err => {
+            console.error('Tracking failed:', err);
+          });
+          
+          // Check admin status (nu blochează UI-ul)
           checkAdminStatus(session.user.id).catch(err => {
             console.error('Admin check failed:', err);
             setIsAdmin(false);
@@ -67,6 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       
       if (session?.user && event === 'SIGNED_IN') {
+        // Track și check în background
+        trackUserLogin(session.user).catch(() => {});
         checkAdminStatus(session.user.id).catch(() => setIsAdmin(false));
       } else if (event === 'SIGNED_OUT') {
         setIsAdmin(false);
