@@ -1283,6 +1283,13 @@ export default function MagiaInmultirii() {
             newResults[activeAdditionBox.index] = currentValue.slice(0, -1);
           }
           setRightAdditionResults(newResults);
+        } else if (activeAdditionBox.zone === 'main') {
+          // Handle backspace for main result boxes (Zeci/Unități)
+          const newResult = editableResult.split('');
+          if (activeDigitIndex >= 0 && activeDigitIndex < newResult.length) {
+            newResult[activeDigitIndex] = '?';
+            setEditableResult(newResult.join(''));
+          }
         }
       } else {
         // Handle backspace for main result - clear current active position
@@ -1350,6 +1357,14 @@ export default function MagiaInmultirii() {
             newResults[activeAdditionBox.index] = currentValue + value;
           }
           setRightAdditionResults(newResults);
+        } else if (activeAdditionBox.zone === 'main') {
+          // Handle digit input for main result boxes (Zeci/Unități)
+          const newResult = editableResult.split('');
+          if (activeDigitIndex >= 0 && activeDigitIndex < newResult.length) {
+            newResult[activeDigitIndex] = value;
+            setEditableResult(newResult.join(''));
+            // Don't auto-move to next position, stay in current position for fixed entry
+          }
         }
       } else {
         // Handle digit input for main result - place in specific position (fixed position)
