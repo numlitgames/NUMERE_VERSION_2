@@ -1741,7 +1741,7 @@ export default function MagiaInmultirii() {
     const isCorrect = editableResult === correctResult.toString();
     
     return (
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 p-4">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 p-4 z-50 shadow-2xl">
         <div className="max-w-7xl mx-auto flex gap-3">
           {/* First Factor Selector - Compact */}
           <div className="bg-blue-50 rounded-xl p-3 border-2 border-blue-200 w-48 flex-shrink-0">
@@ -2091,33 +2091,33 @@ export default function MagiaInmultirii() {
             </h4>
             <div className="flex flex-col items-center">
               {/* Horizontal line of riglete with addition */}
-              <div className="flex items-end gap-4 mb-6">
+              <div className="flex items-end gap-2 sm:gap-3 md:gap-4 mb-6 flex-wrap justify-center max-w-full overflow-hidden">
                 {Array.from({ length: firstNumber }, (_, index) => (
-                  <div key={index} className="flex items-end gap-2">
+                  <div key={index} className="flex items-end gap-1 sm:gap-2">
                     <Rigleta 
                       number={secondNumber} 
                       orientation="vertical" 
                       className="shadow-sm"
                     />
                     {index < firstNumber - 1 && (
-                      <span className="text-4xl font-bold text-orange-600 mb-4">+</span>
+                      <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600 mb-4">+</span>
                     )}
                   </div>
                 ))}
               </div>
               
               {/* Cumulative results below - starting from second rigleta position */}
-              <div className="flex items-center">
+              <div className="flex items-center justify-center flex-wrap max-w-full overflow-hidden">
                 {/* Empty space for first rigleta */}
-                <div className="w-16"></div>
+                <div className="w-12 sm:w-16"></div>
                 
                 {/* Results aligned with riglete starting from second one */}
-                <div className="flex items-center gap-8 ml-4">
+                <div className="flex items-center gap-4 sm:gap-6 md:gap-8 ml-2 sm:ml-4 flex-wrap justify-center">
                   {Array.from({ length: firstNumber - 1 }, (_, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-orange-600">=</span>
+                    <div key={index} className="flex items-center gap-1 sm:gap-2">
+                      <span className="text-xl sm:text-2xl font-bold text-orange-600">=</span>
                       <div 
-                        className={`w-16 h-12 border-2 border-orange-400 bg-white rounded-lg flex items-center justify-center cursor-pointer hover:shadow-lg transition-all ${
+                        className={`w-12 h-10 sm:w-16 sm:h-12 border-2 border-orange-400 bg-white rounded-lg flex items-center justify-center cursor-pointer hover:shadow-lg transition-all ${
                           activeAdditionBox?.zone === 'left' && activeAdditionBox?.index === index ? 'ring-4 ring-yellow-400' : ''
                         }`}
                         onClick={() => setActiveAdditionBox({zone: 'left', index})}
@@ -2126,7 +2126,7 @@ export default function MagiaInmultirii() {
                         role="textbox"
                         aria-label={`Left addition result ${index + 1} input`}
                       >
-                        <span className="text-xl font-bold text-orange-600">
+                        <span className="text-lg sm:text-xl font-bold text-orange-600">
                           {showResult ? secondNumber * (index + 2) : (leftAdditionResults[index] || '?')}
                         </span>
                       </div>
@@ -2144,33 +2144,33 @@ export default function MagiaInmultirii() {
             </h4>
             <div className="flex flex-col items-center">
               {/* Horizontal line of riglete with addition */}
-              <div className="flex items-end gap-4 mb-6">
+              <div className="flex items-end gap-2 sm:gap-3 md:gap-4 mb-6 flex-wrap justify-center max-w-full overflow-hidden">
                 {Array.from({ length: secondNumber }, (_, index) => (
-                  <div key={index} className="flex items-end gap-2">
+                  <div key={index} className="flex items-end gap-1 sm:gap-2">
                     <Rigleta 
                       number={firstNumber} 
                       orientation="vertical" 
                       className="shadow-sm"
                     />
                     {index < secondNumber - 1 && (
-                      <span className="text-4xl font-bold text-red-600 mb-4">+</span>
+                      <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-red-600 mb-4">+</span>
                     )}
                   </div>
                 ))}
               </div>
               
               {/* Cumulative results below - starting from second rigleta position */}
-              <div className="flex items-center">
+              <div className="flex items-center justify-center flex-wrap max-w-full overflow-hidden">
                 {/* Empty space for first rigleta */}
-                <div className="w-16"></div>
+                <div className="w-12 sm:w-16"></div>
                 
                 {/* Results aligned with riglete starting from second one */}
-                <div className="flex items-center gap-8 ml-4">
+                <div className="flex items-center gap-4 sm:gap-6 md:gap-8 ml-2 sm:ml-4 flex-wrap justify-center">
                   {Array.from({ length: secondNumber - 1 }, (_, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-red-600">=</span>
+                    <div key={index} className="flex items-center gap-1 sm:gap-2">
+                      <span className="text-xl sm:text-2xl font-bold text-red-600">=</span>
                       <div 
-                        className={`w-16 h-12 border-2 border-red-400 bg-white rounded-lg flex items-center justify-center cursor-pointer hover:shadow-lg transition-all ${
+                        className={`w-12 h-10 sm:w-16 sm:h-12 border-2 border-red-400 bg-white rounded-lg flex items-center justify-center cursor-pointer hover:shadow-lg transition-all ${
                           activeAdditionBox?.zone === 'right' && activeAdditionBox?.index === index ? 'ring-4 ring-yellow-400' : ''
                         }`}
                         onClick={() => setActiveAdditionBox({zone: 'right', index})}
@@ -2179,7 +2179,7 @@ export default function MagiaInmultirii() {
                         role="textbox"
                         aria-label={`Right addition result ${index + 1} input`}
                       >
-                        <span className="text-xl font-bold text-red-600">
+                        <span className="text-lg sm:text-xl font-bold text-red-600">
                           {showResult ? firstNumber * (index + 2) : (rightAdditionResults[index] || '?')}
                         </span>
                       </div>
@@ -2274,7 +2274,7 @@ export default function MagiaInmultirii() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 p-4 overflow-auto">
+          <div className="flex-1 p-4 pb-64 overflow-auto">
             <div className="w-full">
               {/* Game Content - Full Width */}
               {renderMultiplicationVisualization()}
