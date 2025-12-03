@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 
@@ -15,84 +15,36 @@ interface SpinningWheelProps {
 }
 
 export default function SpinningWheel({ sectors, onResult, className }: SpinningWheelProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [currentRotation, setCurrentRotation] = useState(0);
 
-  const drawWheel = () => {
-    const canvas = canvasRef.current;
-    if (!canvas || sectors.length === 0) return;
+  const size = 600;
+  const centerX = size / 2;
+  const centerY = size / 2;
+  const radius = Math.min(centerX, centerY) - 20;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+  // Create sector path for filled area
+  const createSectorPath = (startAngle: number, endAngle: number, r: number): string => {
+    const startRad = (startAngle - 90) * Math.PI / 180;
+    const endRad = (endAngle - 90) * Math.PI / 180;
+    const x1 = centerX + r * Math.cos(startRad);
+    const y1 = centerY + r * Math.sin(startRad);
+    const x2 = centerX + r * Math.cos(endRad);
+    const y2 = centerY + r * Math.sin(endRad);
+    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${centerX} ${centerY} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+  };
 
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = Math.min(centerX, centerY) - 10;
-    const sectorAngle = (2 * Math.PI) / sectors.length;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate((currentRotation * Math.PI) / 180);
-
-    sectors.forEach((sector, index) => {
-      const startAngle = index * sectorAngle;
-      const endAngle = (index + 1) * sectorAngle;
-
-      // Draw sector
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, radius, startAngle, endAngle);
-      ctx.closePath();
-      ctx.fillStyle = sector.color;
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Draw radial text
-      ctx.save();
-      const midAngle = startAngle + sectorAngle / 2;
-      ctx.rotate(midAngle);
-      
-      // Perfect centering settings
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = sector.color === '#ffffff' ? '#000000' : '#fff';
-      ctx.font = 'bold 16px Arial';
-      ctx.shadowColor = 'rgba(0,0,0,0.5)';
-      ctx.shadowBlur = 2;
-      ctx.shadowOffsetX = 1;
-      ctx.shadowOffsetY = 1;
-      
-      const textRadius = radius * 0.6;
-      const text = sector.text;
-      
-      // Optimal text positioning for readability
-      const angleDegrees = (midAngle * 180) / Math.PI;
-      
-      // If text would be upside down, rotate it 180 degrees for readability
-      if (angleDegrees > 90 && angleDegrees < 270) {
-        ctx.rotate(Math.PI);
-        ctx.fillText(text, 0, -textRadius);
-      } else {
-        ctx.fillText(text, 0, textRadius);
-      }
-      
-      ctx.restore();
-    });
-
-    ctx.restore();
-
-    // Draw pointer
-    ctx.fillStyle = '#333';
-    ctx.beginPath();
-    ctx.moveTo(centerX + radius - 20, centerY);
-    ctx.lineTo(centerX + radius + 10, centerY - 10);
-    ctx.lineTo(centerX + radius + 10, centerY + 10);
-    ctx.closePath();
-    ctx.fill();
+  // Create arc path for curved text
+  const createArcPath = (startAngle: number, endAngle: number, r: number): string => {
+    const startRad = (startAngle - 90) * Math.PI / 180;
+    const endRad = (endAngle - 90) * Math.PI / 180;
+    const x1 = centerX + r * Math.cos(startRad);
+    const y1 = centerY + r * Math.sin(startRad);
+    const x2 = centerX + r * Math.cos(endRad);
+    const y2 = centerY + r * Math.sin(endRad);
+    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
   };
 
   const spinWheel = () => {
@@ -124,8 +76,10 @@ export default function SpinningWheel({ sectors, onResult, className }: Spinning
         setIsSpinning(false);
         
         // Calculate which sector was selected
-        const normalizedRotation = (360 - (rotation % 360)) % 360;
+        // Pointer-ul este la 90° (dreapta), deci adăugăm offset-ul
+        const pointerAngle = 90;
         const sectorAngle = 360 / sectors.length;
+        const normalizedRotation = (360 - (rotation % 360) + pointerAngle) % 360;
         const selectedIndex = Math.floor(normalizedRotation / sectorAngle);
         const selectedSector = sectors[selectedIndex];
         
@@ -138,18 +92,103 @@ export default function SpinningWheel({ sectors, onResult, className }: Spinning
     requestAnimationFrame(animate);
   };
 
-  useEffect(() => {
-    drawWheel();
-  }, [sectors, currentRotation]);
+  if (sectors.length === 0) {
+    return <div className={className}>No sectors defined</div>;
+  }
+
+  const sectorAngle = 360 / sectors.length;
+  const textRadius = radius * 0.7;
 
   return (
     <div className={`flex flex-col items-center gap-4 ${className}`}>
-      <canvas
-        ref={canvasRef}
-        width={600}
-        height={600}
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
         className="border-2 border-muted rounded-full"
-      />
+        style={{ maxWidth: '100%', height: 'auto' }}
+      >
+        <defs>
+          {/* Create arc paths for curved text */}
+          {sectors.map((sector, index) => {
+            const startAngle = sectorAngle * index;
+            const endAngle = sectorAngle * (index + 1);
+            return (
+              <path
+                key={`arc-${index}`}
+                id={`textArc-${index}`}
+                d={createArcPath(startAngle, endAngle, textRadius)}
+                fill="none"
+              />
+            );
+          })}
+        </defs>
+
+        {/* Rotating group */}
+        <g
+          style={{
+            transform: `rotate(${currentRotation}deg)`,
+            transformOrigin: 'center',
+            transition: isSpinning ? 'none' : 'transform 0.1s ease-out',
+          }}
+        >
+          {sectors.map((sector, index) => {
+            const startAngle = sectorAngle * index;
+            const endAngle = sectorAngle * (index + 1);
+            const textColor = sector.color === '#ffffff' ? '#000000' : '#ffffff';
+
+            return (
+              <g key={sector.id}>
+                {/* Sector shape */}
+                <path
+                  d={createSectorPath(startAngle, endAngle, radius)}
+                  fill={sector.color}
+                  stroke="#ffffff"
+                  strokeWidth="3"
+                />
+
+                {/* Curved text on arc */}
+                <text
+                  fill={textColor}
+                  fontSize="18"
+                  fontWeight="bold"
+                  fontFamily="Arial, sans-serif"
+                  textAnchor="middle"
+                  style={{
+                    paintOrder: 'stroke',
+                    stroke: 'rgba(0,0,0,0.4)',
+                    strokeWidth: 2,
+                    strokeLinejoin: 'round',
+                  }}
+                >
+                  <textPath href={`#textArc-${index}`} startOffset="50%">
+                    {sector.text}
+                  </textPath>
+                </text>
+              </g>
+            );
+          })}
+        </g>
+
+        {/* Pointer (indicator) - does not rotate */}
+        <polygon
+          points={`${centerX + radius - 15},${centerY} ${centerX + radius + 15},${centerY - 12} ${centerX + radius + 15},${centerY + 12}`}
+          fill="#333333"
+          stroke="#ffffff"
+          strokeWidth="2"
+        />
+
+        {/* Center circle decoration */}
+        <circle
+          cx={centerX}
+          cy={centerY}
+          r={40}
+          fill="#ffffff"
+          stroke="#cccccc"
+          strokeWidth="3"
+        />
+      </svg>
+
       <Button
         onClick={spinWheel}
         disabled={isSpinning || sectors.length === 0}

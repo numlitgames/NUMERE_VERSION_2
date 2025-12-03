@@ -3,11 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ZoomIn, ZoomOut, Smartphone, Tablet, Monitor, Play, Shield, LogOut, User } from "lucide-react";
+import { ZoomIn, ZoomOut, Smartphone, Tablet, Monitor, Play } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 
 const languages = {
   ro: {
@@ -86,12 +83,16 @@ const languages = {
         description: "Învață bazele calculului matematic prin riglete NumLit interactive și vizualizări."
       },
       literatie: {
-        title: "Literație Metoda Cubului",
-        description: "Dezvoltă abilități de citire și scriere prin exerciții interactive și jocuri educative."
+        title: "Zar, Ruletă, Cub",
+        description: "Jocuri interactive cu zar, ruletă și cub 3D pentru activități educative distractive."
       },
       litera_silaba: {
         title: "Litera - Silaba",
         description: "Dezvoltă abilitățile de recunoaștere a literelor mari și mici prin jocuri interactive de drag & drop."
+      },
+      tabla_interactiva: {
+        title: "Tabla Interactivă",
+        description: "Scrie liber pe tabla interactivă cu suport pentru 16 limbi și tastatură personalizabilă."
       },
       time_measurement: {
         title: "Calendarul Naturii - Măsurarea Timpului",
@@ -102,8 +103,8 @@ const languages = {
         description: "Învață să transformi unitățile de măsură pentru lungime, volum și greutate."
       },
       countries_capitals: {
-        title: "Țări și Capitale",
-        description: "Învață țările și capitalele lumii prin jocuri interactive."
+        title: "Harta în Ceață",
+        description: "Degajează ceața de pe hartă ghicind țările din indicii progressive!"
       },
       continents_oceans: {
         title: "Continente și Oceane",
@@ -132,6 +133,10 @@ const languages = {
       daily_schedule: {
         title: "Ce fac astăzi",
         description: "Organizează-ți ziua prin tragerea activităților în intervalele orare corespunzătoare."
+      },
+      calming_wheel: {
+        title: "Cum mă calmez",
+        description: "Învață tehnici de relaxare și gestionare a emoțiilor prin ruleta calmării."
       }
     }
   },
@@ -211,12 +216,16 @@ const languages = {
         description: "Learn mathematical calculation basics through interactive NumLit rods and visualizations."
       },
       literatie: {
-        title: "Literacy",
-        description: "Develop reading and writing skills through interactive exercises and educational games."
+        title: "Dice, Roulette, Cube",
+        description: "Interactive games with dice, roulette and 3D cube for fun educational activities."
       },
       litera_silaba: {
         title: "Letter - Syllable",
         description: "Develop uppercase and lowercase letter recognition skills through interactive drag & drop games."
+      },
+      tabla_interactiva: {
+        title: "Interactive Board",
+        description: "Write freely on the interactive board with support for 16 languages and customizable keyboard."
       },
       time_measurement: {
         title: "Time Measurement",
@@ -227,8 +236,8 @@ const languages = {
         description: "Learn to convert measurement units for length, volume and weight."
       },
       countries_capitals: {
-        title: "Countries and Capitals",
-        description: "Learn countries and capitals of the world through interactive games."
+        title: "Fog of Geography",
+        description: "Clear the fog from the map by guessing countries from progressive clues!"
       },
       continents_oceans: {
         title: "Continents and Oceans",
@@ -257,6 +266,10 @@ const languages = {
       daily_schedule: {
         title: "What I Do Today",
         description: "Organize your day by dragging activities into the corresponding time slots."
+      },
+      calming_wheel: {
+        title: "How I Calm Down",
+        description: "Learn relaxation and emotion management techniques through the calming wheel."
       }
     }
   },
@@ -336,12 +349,16 @@ const languages = {
         description: "Tanulj matematikai alapokat NumLit pálcikákkal és vizualizációkkal."
       },
       literatie: {
-        title: "Írás-olvasás",
-        description: "Fejlessze olvasási és írási készségeit interaktív gyakorlatokkal."
+        title: "Kocka, Rulett, Kocka",
+        description: "Interaktív játékok kockával, rulettel és 3D kockával szórakoztató oktatási tevékenységekhez."
       },
       litera_silaba: {
         title: "Betű - Szótag",
         description: "Fejlessze nagy- és kisbetű felismerési képességeit húzás-ejtés játékokon keresztül."
+      },
+      tabla_interactiva: {
+        title: "Interaktív Tábla",
+        description: "Írjon szabadon az interaktív táblán 16 nyelv támogatásával és testreszabható billentyűzettel."
       },
       time_measurement: {
         title: "Időmérés",
@@ -352,8 +369,8 @@ const languages = {
         description: "Tanulj meg átváltani hosszúsági, térfogat és tömeg mértékegységeket."
       },
       countries_capitals: {
-        title: "Országok és Fővárosok",
-        description: "Tanuld meg a világ országait és fővárosait interaktív játékokon keresztül."
+        title: "Földrajz Köd",
+        description: "Távolítsd el a ködöt a térképről országok kitalálásával progresszív tippekből!"
       },
       continents_oceans: {
         title: "Kontinensek és Óceánok",
@@ -382,6 +399,10 @@ const languages = {
       daily_schedule: {
         title: "Mit csinálok ma",
         description: "Szervezd meg a napodat a tevékenységek megfelelő időszakokba húzásával."
+      },
+      calming_wheel: {
+        title: "Hogyan nyugszom meg",
+        description: "Tanulj relaxációs és érzelemkezelési technikákat a megnyugvás kerekével."
       }
     }
   },
@@ -461,12 +482,16 @@ const languages = {
         description: "Lerne mathematische Grundlagen mit NumLit Stäben und Visualisierungen."
       },
       literatie: {
-        title: "Lesen und Schreiben",
-        description: "Entwickle Lese- und Schreibfähigkeiten durch interaktive Übungen."
+        title: "Würfel, Roulette, Würfel",
+        description: "Interaktive Spiele mit Würfel, Roulette und 3D-Würfel für unterhaltsame Bildungsaktivitäten."
       },
       litera_silaba: {
         title: "Buchstabe - Silbe",
         description: "Entwickle Groß- und Kleinbuchstaben-Erkennungsfähigkeiten durch Drag & Drop Spiele."
+      },
+      tabla_interactiva: {
+        title: "Interaktive Tafel",
+        description: "Schreiben Sie frei auf der interaktiven Tafel mit Unterstützung für 16 Sprachen."
       },
       time_measurement: {
         title: "Zeitmessung",
@@ -477,8 +502,8 @@ const languages = {
         description: "Lerne Maßeinheiten für Länge, Volumen und Gewicht umzurechnen."
       },
       countries_capitals: {
-        title: "Länder und Hauptstädte",
-        description: "Lerne die Länder und Hauptstädte der Welt durch interaktive Spiele."
+        title: "Nebel der Geographie",
+        description: "Lüfte den Nebel von der Karte, indem du Länder aus progressiven Hinweisen errätst!"
       },
       continents_oceans: {
         title: "Kontinente und Ozeane",
@@ -507,6 +532,10 @@ const languages = {
       daily_schedule: {
         title: "Was mache ich heute",
         description: "Organisiere deinen Tag, indem du Aktivitäten in die entsprechenden Zeitfenster ziehst."
+      },
+      calming_wheel: {
+        title: "Wie ich mich beruhige",
+        description: "Lerne Entspannungs- und Emotionsmanagement-Techniken mit dem Beruhigungsrad."
       }
     }
   },
@@ -586,12 +615,16 @@ const languages = {
         description: "Aprende fundamentos matemáticos con varillas NumLit y visualizaciones."
       },
       literatie: {
-        title: "Lectoescritura",
-        description: "Desarrolla habilidades de lectura y escritura a través de ejercicios interactivos."
+        title: "Dado, Ruleta, Cubo",
+        description: "Juegos interactivos con dado, ruleta y cubo 3D para actividades educativas divertidas."
       },
       litera_silaba: {
         title: "Letra - Sílaba",
         description: "Desarrolla habilidades de reconocimiento de letras mayúsculas y minúsculas mediante juegos de arrastrar y soltar."
+      },
+      tabla_interactiva: {
+        title: "Pizarra Interactiva",
+        description: "Escriba libremente en la pizarra interactiva con soporte para 16 idiomas."
       },
       time_measurement: {
         title: "Medición del Tiempo",
@@ -632,6 +665,10 @@ const languages = {
       daily_schedule: {
         title: "Qué hago hoy",
         description: "Organiza tu día arrastrando actividades a los intervalos horarios correspondientes."
+      },
+      calming_wheel: {
+        title: "Cómo me calmo",
+        description: "Aprende técnicas de relajación y gestión emocional con la ruleta de la calma."
       }
     }
   },
@@ -711,12 +748,16 @@ const languages = {
         description: "Impara le basi matematiche con bacchette NumLit e visualizzazioni."
       },
       literatie: {
-        title: "Alfabetizzazione",
-        description: "Sviluppa abilità di lettura e scrittura attraverso esercizi interattivi."
+        title: "Dado, Roulette, Cubo",
+        description: "Giochi interattivi con dado, roulette e cubo 3D per attività educative divertenti."
       },
       litera_silaba: {
         title: "Lettera - Sillaba",
         description: "Sviluppa le abilità di riconoscimento delle lettere maiuscole e minuscole attraverso giochi di trascinamento."
+      },
+      tabla_interactiva: {
+        title: "Lavagna Interattiva",
+        description: "Scrivi liberamente sulla lavagna interattiva con supporto per 16 lingue."
       },
       time_measurement: {
         title: "Misurazione del Tempo",
@@ -757,6 +798,10 @@ const languages = {
       daily_schedule: {
         title: "Cosa faccio oggi",
         description: "Organizza la tua giornata trascinando le attività negli slot temporali corrispondenti."
+      },
+      calming_wheel: {
+        title: "Come mi calmo",
+        description: "Impara tecniche di rilassamento e gestione delle emozioni con la ruota della calma."
       }
     }
   },
@@ -905,8 +950,8 @@ const languages = {
         description: "Изучай основы математики с палочками NumLit и визуализациями."
       },
       literatie: {
-        title: "Грамотность",
-        description: "Развивай навыки чтения и письма через интерактивные упражнения."
+        title: "Кубик, Рулетка, Куб",
+        description: "Интерактивные игры с кубиком, рулеткой и 3D-кубом для веселых образовательных занятий."
       },
       litera_silaba: {
         title: "Буква - Слог",
@@ -951,6 +996,10 @@ const languages = {
       daily_schedule: {
         title: "Что я делаю сегодня",
         description: "Организуй свой день, перетаскивая активности в соответствующие временные интервалы."
+      },
+      calming_wheel: {
+        title: "Как я успокаиваюсь",
+        description: "Изучи техники релаксации и управления эмоциями с колесом спокойствия."
       }
     }
   },
@@ -1030,8 +1079,8 @@ const languages = {
         description: "Μάθε μαθηματικές βάσεις με ράβδους NumLit και απεικονίσεις."
       },
       literatie: {
-        title: "Γραμματισμός",
-        description: "Αναπτύξτε δεξιότητες ανάγνωσης και γραφής μέσω διαδραστικών ασκήσεων."
+        title: "Ζάρι, Ρουλέτα, Κύβος",
+        description: "Διαδραστικά παιχνίδια με ζάρι, ρουλέτα και 3D κύβο για διασκεδαστικές εκπαιδευτικές δραστηριότητες."
       },
       litera_silaba: {
         title: "Γράμμα - Συλλαβή",
@@ -1076,6 +1125,10 @@ const languages = {
       daily_schedule: {
         title: "Τι κάνω σήμερα",
         description: "Οργανώστε τη μέρα σας σύροντας δραστηριότητες στις αντίστοιχες χρονικές θέσεις."
+      },
+      calming_wheel: {
+        title: "Πώς ηρεμώ",
+        description: "Μάθετε τεχνικές χαλάρωσης και διαχείρισης συναισθημάτων με τον τροχό της ηρεμίας."
       }
     }
   },
@@ -1155,8 +1208,8 @@ const languages = {
         description: "Научи математически основи с пръчки NumLit и визуализации."
       },
       literatie: {
-        title: "Грамотност",
-        description: "Развий умения за четене и писане чрез интерактивни упражнения."
+        title: "Зар, Рулетка, Куб",
+        description: "Интерактивни игри със зар, рулетка и 3D куб за забавни образователни дейности."
       },
       litera_silaba: {
         title: "Буква - Срички",
@@ -1268,8 +1321,8 @@ const languages = {
         description: "Naucz się podstaw matematyki z pałeczkami NumLit i wizualizacjami."
       },
       literatie: {
-        title: "Umiejętności Czytania i Pisania",
-        description: "Rozwijaj umiejętności czytania i pisania poprzez interaktywne ćwiczenia."
+        title: "Kość, Ruletka, Kostka",
+        description: "Interaktywne gry z kością, ruletką i kostką 3D dla zabawnych zajęć edukacyjnych."
       },
       litera_silaba: {
         title: "Litera - Sylaba",
@@ -1314,6 +1367,10 @@ const languages = {
       daily_schedule: {
         title: "Co robię dzisiaj",
         description: "Zorganizuj swój dzień przeciągając aktywności do odpowiednich przedziałów czasowych."
+      },
+      calming_wheel: {
+        title: "Jak się uspokajam",
+        description: "Naucz się technik relaksacji i zarządzania emocjami za pomocą koła spokoju."
       }
     }
   },
@@ -1389,8 +1446,8 @@ const languages = {
         description: "تعلم أساسيات الرياضيات بعصي NumLit والتصورات."
       },
       literatie: {
-        title: "محو الأمية",
-        description: "طور مهارات القراءة والكتابة من خلال التمارين التفاعلية."
+        title: "نرد، روليت، مكعب",
+        description: "ألعاب تفاعلية مع النرد والروليت والمكعب ثلاثي الأبعاد لأنشطة تعليمية ممتعة."
       },
       litera_silaba: {
         title: "الحرف - المقطع",
@@ -1502,8 +1559,8 @@ const languages = {
         description: "Naučte se matematické základy s tyčinkami NumLit a vizualizacemi."
       },
       literatie: {
-        title: "Gramotnost",
-        description: "Rozvíjejte dovednosti čtení a psaní prostřednictvím interaktivních cvičení."
+        title: "Kostka, Ruleta, Kostka",
+        description: "Interaktivní hry s kostkou, ruletou a 3D kostkou pro zábavné vzdělávací aktivity."
       },
       litera_silaba: {
         title: "Písmeno - Slabika",
@@ -1615,8 +1672,8 @@ const languages = {
         description: "Aprende fundamentos matemáticos com varinhas NumLit e visualizações."
       },
       literatie: {
-        title: "Literacia",
-        description: "Desenvolve competências de leitura e escrita através de exercícios interativos."
+        title: "Dado, Roleta, Cubo",
+        description: "Jogos interativos com dado, roleta e cubo 3D para atividades educativas divertidas."
       },
       litera_silaba: {
         title: "Letra - Sílaba",
@@ -1732,8 +1789,8 @@ const languages = {
         description: "NumLit çubukları ve görselleştirmelerle matematiksel temelleri öğren."
       },
       literatie: {
-        title: "Okuryazarlık",
-        description: "Etkileşimli alıştırmalarla okuma ve yazma becerilerini geliştir."
+        title: "Zar, Rulet, Küp",
+        description: "Eğlenceli eğitim etkinlikleri için zar, rulet ve 3D küp ile etkileşimli oyunlar."
       },
       litera_silaba: {
         title: "Harf - Hece",
@@ -1778,6 +1835,10 @@ const languages = {
       daily_schedule: {
         title: "Bugün ne yapıyorum",
         description: "Aktiviteleri ilgili zaman dilimlerine sürükleyerek gününüzü organize edin."
+      },
+      calming_wheel: {
+        title: "Nasıl sakinleşirim",
+        description: "Sakinlik çarkı ile rahatlama ve duygu yönetimi tekniklerini öğrenin."
       }
     }
   }
@@ -1883,7 +1944,7 @@ const games = [
   },
   {
     key: "letters",
-    module: "literacy",
+    module: "math",
     slug: "litere-acomodare",
     level: 1,
     language: "ro",
@@ -1901,6 +1962,14 @@ const games = [
     key: "litera_silaba",
     module: "communication", 
     slug: "litera-silaba",
+    level: 1,
+    language: "ro",
+    functional: true
+  },
+  {
+    key: "tabla_interactiva",
+    module: "communication", 
+    slug: "tabla-interactiva",
     level: 1,
     language: "ro",
     functional: true
@@ -1984,6 +2053,14 @@ const games = [
     level: 1,
     language: "ro",
     functional: true
+  },
+  {
+    key: "calming_wheel",
+    module: "skills",
+    slug: "cum-ma-calmez",
+    level: 1,
+    language: "ro",
+    functional: true
   }
 ];
 
@@ -1991,8 +2068,6 @@ export default function Index() {
   const [selectedLanguage, setSelectedLanguage] = useState<keyof typeof languages>("ro");
   const [scale, setScale] = useState([100]);
   const [deviceMode, setDeviceMode] = useState<'phone' | 'tablet' | 'desktop'>('desktop');
-  const { user, isAdmin, signOut } = useAuth();
-  const navigate = useNavigate();
   const t = languages[selectedLanguage] || languages.ro;
 
   const getDeviceStyles = () => {
@@ -2040,41 +2115,6 @@ export default function Index() {
             </p>
           </div>
         </div>
-
-        {/* User Info & Admin Access */}
-        {user && (
-          <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user.user_metadata.avatar_url} />
-              <AvatarFallback>
-                <User className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-sm font-medium hidden sm:inline">
-              {user.user_metadata.full_name || user.email}
-            </span>
-            {isAdmin && (
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => navigate('/admin')}
-                className="gap-1"
-              >
-                <Shield className="h-4 w-4" />
-                Admin
-              </Button>
-            )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={signOut}
-              className="gap-1"
-            >
-              <LogOut className="h-4 w-4" />
-              Deconectare
-            </Button>
-          </div>
-        )}
 
         {/* Language Selector */}
         <div className="flex justify-center">
@@ -2342,6 +2382,8 @@ export default function Index() {
                              window.open('/literatie', '_self');
                            } else if (game.key === 'litera_silaba') {
                              window.open('/litera-silaba', '_self');
+                           } else if (game.key === 'tabla_interactiva') {
+                             window.open('/tabla-interactiva', '_self');
                            } else if (game.key === 'time_measurement') {
                              window.open('/masurarea-timpului', '_self');
                            }
@@ -2480,6 +2522,8 @@ export default function Index() {
                             window.open('/culori', '_self');
                           } else if (game.key === 'daily_schedule') {
                             window.open('/ce-fac-astazi', '_self');
+                          } else if (game.key === 'calming_wheel') {
+                            window.open('/cum-ma-calmez', '_self');
                           }
                         }}
                       >
