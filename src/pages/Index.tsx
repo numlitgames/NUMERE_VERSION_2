@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { ZoomIn, ZoomOut, Smartphone, Tablet, Monitor, Play } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ZoomIn, ZoomOut, Smartphone, Tablet, Monitor, Play, Shield, LogOut, User } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const languages = {
   ro: {
@@ -2068,6 +2071,8 @@ export default function Index() {
   const [selectedLanguage, setSelectedLanguage] = useState<keyof typeof languages>("ro");
   const [scale, setScale] = useState([100]);
   const [deviceMode, setDeviceMode] = useState<'phone' | 'tablet' | 'desktop'>('desktop');
+  const { user, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
   const t = languages[selectedLanguage] || languages.ro;
 
   const getDeviceStyles = () => {
@@ -2115,6 +2120,75 @@ export default function Index() {
             </p>
           </div>
         </div>
+{/* User Info & Admin Access */}
+        {user && (
+          <div className="flex items-center gap-2">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={user.user_metadata.avatar_url} />
+              <AvatarFallback>
+                <User className="h-4 w-4" />
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-medium hidden sm:inline">
+              {user.user_metadata.full_name || user.email}
+            </span>
+            {isAdmin && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => navigate('/admin')}
+                className="gap-1"
+              >
+                <Shield className="h-4 w-4" />
+                Admin
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={signOut}
+              className="gap-1"
+            >
+              <LogOut className="h-4 w-4" />
+              Deconectare
+            </Button>
+          </div>
+        )}
+
+        {/* User Info & Admin Access */}
+        {user && (
+          <div className="flex items-center gap-2">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={user.user_metadata.avatar_url} />
+              <AvatarFallback>
+                <User className="h-4 w-4" />
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-sm font-medium hidden sm:inline">
+              {user.user_metadata.full_name || user.email}
+            </span>
+            {isAdmin && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => navigate('/admin')}
+                className="gap-1"
+              >
+                <Shield className="h-4 w-4" />
+                Admin
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={signOut}
+              className="gap-1"
+            >
+              <LogOut className="h-4 w-4" />
+              Deconectare
+            </Button>
+          </div>
+        )}
 
         {/* Language Selector */}
         <div className="flex justify-center">
