@@ -2120,40 +2120,6 @@ export default function Index() {
             </p>
           </div>
         </div>
-{/* User Info & Admin Access */}
-        {user && (
-          <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user.user_metadata.avatar_url} />
-              <AvatarFallback>
-                <User className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-            <span className="text-sm font-medium hidden sm:inline">
-              {user.user_metadata.full_name || user.email}
-            </span>
-            {isAdmin && (
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => navigate('/admin')}
-                className="gap-1"
-              >
-                <Shield className="h-4 w-4" />
-                Admin
-              </Button>
-            )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={signOut}
-              className="gap-1"
-            >
-              <LogOut className="h-4 w-4" />
-              Deconectare
-            </Button>
-          </div>
-        )}
 
         {/* User Info & Admin Access */}
         {user && (
