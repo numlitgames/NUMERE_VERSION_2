@@ -26,7 +26,39 @@ interface LiteracyKeyboardProps {
   className?: string;
   selectedLanguage?: string;
   onLanguageChange?: (language: string) => void;
+  currentLanguage?: string;
 }
+
+// Keyboard UI translations for all 16 languages
+const keyboardTranslations: Record<string, {
+  moveKeyboard: string;
+  expandKeyboard: string;
+  collapseKeyboard: string;
+  closeKeyboard: string;
+  fontType: string;
+  zoom: string;
+  shrinkKeyboard: string;
+  enlargeKeyboard: string;
+  position: string;
+}> = {
+  ar: { moveKeyboard: "تحريك لوحة المفاتيح", expandKeyboard: "توسيع لوحة المفاتيح", collapseKeyboard: "طي لوحة المفاتيح", closeKeyboard: "إغلاق لوحة المفاتيح", fontType: "نوع الخط", zoom: "تكبير", shrinkKeyboard: "تصغير لوحة المفاتيح", enlargeKeyboard: "تكبير لوحة المفاتيح", position: "الموضع" },
+  bg: { moveKeyboard: "Премести клавиатурата", expandKeyboard: "Разшири клавиатурата", collapseKeyboard: "Свий клавиатурата", closeKeyboard: "Затвори клавиатурата", fontType: "Тип шрифт", zoom: "Мащаб", shrinkKeyboard: "Намали клавиатурата", enlargeKeyboard: "Увеличи клавиатурата", position: "Позиция" },
+  cs: { moveKeyboard: "Přesunout klávesnici", expandKeyboard: "Rozbalit klávesnici", collapseKeyboard: "Sbalit klávesnici", closeKeyboard: "Zavřít klávesnici", fontType: "Typ písma", zoom: "Zoom", shrinkKeyboard: "Zmenšit klávesnici", enlargeKeyboard: "Zvětšit klávesnici", position: "Pozice" },
+  de: { moveKeyboard: "Tastatur verschieben", expandKeyboard: "Tastatur erweitern", collapseKeyboard: "Tastatur minimieren", closeKeyboard: "Tastatur schließen", fontType: "Schriftart", zoom: "Zoom", shrinkKeyboard: "Tastatur verkleinern", enlargeKeyboard: "Tastatur vergrößern", position: "Position" },
+  en: { moveKeyboard: "Move keyboard", expandKeyboard: "Expand keyboard", collapseKeyboard: "Collapse keyboard", closeKeyboard: "Close keyboard", fontType: "Font Type", zoom: "Zoom", shrinkKeyboard: "Shrink keyboard", enlargeKeyboard: "Enlarge keyboard", position: "Position" },
+  es: { moveKeyboard: "Mover teclado", expandKeyboard: "Expandir teclado", collapseKeyboard: "Contraer teclado", closeKeyboard: "Cerrar teclado", fontType: "Tipo de fuente", zoom: "Zoom", shrinkKeyboard: "Reducir teclado", enlargeKeyboard: "Ampliar teclado", position: "Posición" },
+  fr: { moveKeyboard: "Déplacer le clavier", expandKeyboard: "Étendre le clavier", collapseKeyboard: "Réduire le clavier", closeKeyboard: "Fermer le clavier", fontType: "Type de police", zoom: "Zoom", shrinkKeyboard: "Rétrécir le clavier", enlargeKeyboard: "Agrandir le clavier", position: "Position" },
+  hi: { moveKeyboard: "कीबोर्ड ले जाएं", expandKeyboard: "कीबोर्ड विस्तृत करें", collapseKeyboard: "कीबोर्ड संकुचित करें", closeKeyboard: "कीबोर्ड बंद करें", fontType: "फ़ॉन्ट प्रकार", zoom: "ज़ूम", shrinkKeyboard: "कीबोर्ड छोटा करें", enlargeKeyboard: "कीबोर्ड बड़ा करें", position: "स्थिति" },
+  hu: { moveKeyboard: "Billentyűzet mozgatása", expandKeyboard: "Billentyűzet kibontása", collapseKeyboard: "Billentyűzet összecsukása", closeKeyboard: "Billentyűzet bezárása", fontType: "Betűtípus", zoom: "Nagyítás", shrinkKeyboard: "Billentyűzet kicsinyítése", enlargeKeyboard: "Billentyűzet nagyítása", position: "Pozíció" },
+  it: { moveKeyboard: "Sposta tastiera", expandKeyboard: "Espandi tastiera", collapseKeyboard: "Comprimi tastiera", closeKeyboard: "Chiudi tastiera", fontType: "Tipo carattere", zoom: "Zoom", shrinkKeyboard: "Riduci tastiera", enlargeKeyboard: "Ingrandisci tastiera", position: "Posizione" },
+  ja: { moveKeyboard: "キーボードを移動", expandKeyboard: "キーボードを展開", collapseKeyboard: "キーボードを折りたたむ", closeKeyboard: "キーボードを閉じる", fontType: "フォントタイプ", zoom: "ズーム", shrinkKeyboard: "キーボードを縮小", enlargeKeyboard: "キーボードを拡大", position: "位置" },
+  pl: { moveKeyboard: "Przesuń klawiaturę", expandKeyboard: "Rozwiń klawiaturę", collapseKeyboard: "Zwiń klawiaturę", closeKeyboard: "Zamknij klawiaturę", fontType: "Typ czcionki", zoom: "Powiększenie", shrinkKeyboard: "Zmniejsz klawiaturę", enlargeKeyboard: "Powiększ klawiaturę", position: "Pozycja" },
+  ro: { moveKeyboard: "Mutare tastatură", expandKeyboard: "Extinde tastatura", collapseKeyboard: "Compactează tastatura", closeKeyboard: "Închide tastatura", fontType: "Tip Font", zoom: "Zoom", shrinkKeyboard: "Micșorează tastatura", enlargeKeyboard: "Mărește tastatura", position: "Poziție" },
+  ru: { moveKeyboard: "Переместить клавиатуру", expandKeyboard: "Развернуть клавиатуру", collapseKeyboard: "Свернуть клавиатуру", closeKeyboard: "Закрыть клавиатуру", fontType: "Тип шрифта", zoom: "Масштаб", shrinkKeyboard: "Уменьшить клавиатуру", enlargeKeyboard: "Увеличить клавиатуру", position: "Позиция" },
+  tr: { moveKeyboard: "Klavyeyi taşı", expandKeyboard: "Klavyeyi genişlet", collapseKeyboard: "Klavyeyi daralt", closeKeyboard: "Klavyeyi kapat", fontType: "Yazı Tipi", zoom: "Yakınlaştır", shrinkKeyboard: "Klavyeyi küçült", enlargeKeyboard: "Klavyeyi büyüt", position: "Konum" },
+  zh: { moveKeyboard: "移动键盘", expandKeyboard: "展开键盘", collapseKeyboard: "折叠键盘", closeKeyboard: "关闭键盘", fontType: "字体类型", zoom: "缩放", shrinkKeyboard: "缩小键盘", enlargeKeyboard: "放大键盘", position: "位置" },
+  el: { moveKeyboard: "Μετακίνηση πληκτρολογίου", expandKeyboard: "Επέκταση πληκτρολογίου", collapseKeyboard: "Σύμπτυξη πληκτρολογίου", closeKeyboard: "Κλείσιμο πληκτρολογίου", fontType: "Τύπος γραμματοσειράς", zoom: "Μεγέθυνση", shrinkKeyboard: "Σμίκρυνση πληκτρολογίου", enlargeKeyboard: "Μεγέθυνση πληκτρολογίου", position: "Θέση" }
+};
 
 // Language alphabets and vowels
 const languageData = {
@@ -162,8 +194,11 @@ export default function LiteracyKeyboard({
   onClose,
   className,
   selectedLanguage = 'ro',
-  onLanguageChange
+  onLanguageChange,
+  currentLanguage = 'ro'
 }: LiteracyKeyboardProps) {
+  // Get keyboard translations
+  const kt = keyboardTranslations[currentLanguage] || keyboardTranslations.ro;
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -427,7 +462,7 @@ export default function LiteracyKeyboard({
                   variant="outline"
                   size="sm"
                   className="p-2 h-8 w-8"
-                  title="Mutare tastatură"
+                  title={kt.moveKeyboard}
                   onMouseDown={handleMouseDown}
                 >
                   <Move className="w-4 h-4" />
@@ -438,7 +473,7 @@ export default function LiteracyKeyboard({
                   size="sm"
                   onClick={() => setIsCompact(!isCompact)}
                   className="p-2 h-8 w-8"
-                  title={isCompact ? "Extinde tastatura" : "Compactează tastatura"}
+                  title={isCompact ? kt.expandKeyboard : kt.collapseKeyboard}
                 >
                   {isCompact ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
                 </Button>
@@ -449,7 +484,7 @@ export default function LiteracyKeyboard({
                     size="sm"
                     onClick={onClose}
                     className="p-2 h-8 w-8"
-                    title="Închide tastatura"
+                    title={kt.closeKeyboard}
                   >
                     <X className="w-4 h-4" />
                   </Button>
@@ -458,7 +493,7 @@ export default function LiteracyKeyboard({
 
               {/* Font Type Selector */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Tip Font:</label>
+                <label className="text-sm font-medium">{kt.fontType}:</label>
                 <div className="grid grid-cols-2 gap-2">
                   {fontTypes.map((font) => (
                     <Button
@@ -481,7 +516,7 @@ export default function LiteracyKeyboard({
 
               {/* Zoom Controls */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Zoom:</label>
+                <label className="text-sm font-medium">{kt.zoom}:</label>
                 <div className="flex items-center justify-between gap-2">
                   <Button
                     variant="outline"
@@ -489,7 +524,7 @@ export default function LiteracyKeyboard({
                     onClick={handleZoomOut}
                     disabled={currentZoomIndex === 0}
                     className="h-8 w-8 p-0"
-                    title="Micșorează tastatura"
+                    title={kt.shrinkKeyboard}
                   >
                     <ZoomOut className="w-4 h-4" />
                   </Button>
@@ -502,7 +537,7 @@ export default function LiteracyKeyboard({
                     onClick={handleZoomIn}
                     disabled={currentZoomIndex === zoomLevels.length - 1}
                     className="h-8 w-8 p-0"
-                    title="Mărește tastatura"
+                    title={kt.enlargeKeyboard}
                   >
                     <ZoomIn className="w-4 h-4" />
                   </Button>
@@ -516,10 +551,10 @@ export default function LiteracyKeyboard({
                   size="sm"
                   onClick={onClose}
                   className="w-full mt-auto"
-                  title="Închide tastatura"
+                  title={kt.closeKeyboard}
                 >
                   <X className="w-4 h-4 mr-2" />
-                  Închide Tastatura
+                  {kt.closeKeyboard}
                 </Button>
               )}
             </div>
@@ -536,7 +571,7 @@ export default function LiteracyKeyboard({
                 size="sm"
                 onClick={onClose}
                 className="p-1 h-6 w-6"
-                title="Închide tastatura"
+                title={kt.closeKeyboard}
               >
                 <X className="w-3 h-3" />
               </Button>
@@ -553,7 +588,7 @@ export default function LiteracyKeyboard({
               {/* Right Selectors */}
               <div className="flex flex-col items-center gap-4 ml-4 pt-4">
                 <div className="flex flex-col items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                  <span className="text-sm font-medium text-primary">Poziție:</span>
+                  <span className="text-sm font-medium text-primary">{kt.position}:</span>
                   <VerticalSelector
                     value={selectedLetter ? currentLangData.alphabet.indexOf(selectedLetter) + 1 : 0}
                     min={0}

@@ -21,6 +21,7 @@ import MaJocCuFractii from "./pages/MaJocCuFractii";
 import BazeleCalcululuiMatematic from "./pages/BazeleCalcululuiMatematic";
 import Literatie from "./pages/Literatie";
 import LiteraSilaba from "./pages/LiteraSilaba";
+import TablaInteractiva from "./pages/TablaInteractiva";
 import UnitatiDeMasura from "./pages/UnitatiDeMasura";
 import TariCapitale from "./pages/TariCapitale";
 import ContinenteOceane from "./pages/ContinenteOceane";
@@ -30,6 +31,7 @@ import AventuraBusolei from "./pages/AventuraBusolei";
 import OrientareNaturala from "./pages/OrientareNaturala";
 import Culori from "./pages/Culori";
 import CeFacAstazi from "./pages/CeFacAstazi";
+import CumMaCalmez from "./pages/CumMaCalmez";
 
 const queryClient = new QueryClient();
 
@@ -39,12 +41,12 @@ const App = () => (
       <Toaster />
       <Sonner position="top-left" />
       <BrowserRouter>
-        <AuthProvider>
+      <AuthProvider>
           <GameTracker />
           <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
-            
+
             {/* Protected routes - require authentication */}
             <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/demo" element={<ProtectedRoute><GameDemo /></ProtectedRoute>} />
@@ -67,10 +69,11 @@ const App = () => (
             <Route path="/orientare-naturala" element={<ProtectedRoute><OrientareNaturala /></ProtectedRoute>} />
             <Route path="/culori" element={<ProtectedRoute><Culori /></ProtectedRoute>} />
             <Route path="/ce-fac-astazi" element={<ProtectedRoute><CeFacAstazi /></ProtectedRoute>} />
-            
+            <Route path="/cum-ma-calmez" element={<CumMaCalmez />} />
+
             {/* Admin-only route */}
             <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminDashboard /></ProtectedRoute>} />
-            
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
